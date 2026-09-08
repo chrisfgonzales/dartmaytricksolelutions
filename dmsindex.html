@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot Matrix Solutions | GoDaddy Airo Powered AI Ecosystem</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        },
+                        matrix: {
+                            dark: '#07090e',
+                            card: 'rgba(15, 23, 42, 0.65)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            violet: '#8b5cf6',
+                            pink: '#ec4899',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 5s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'spin-slow': 'spin 18s linear infinite',
+                        'shimmer': 'shimmer 2.5s infinite linear',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-18px) rotate(2deg)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4', filter: 'drop-shadow(0 0 15px rgba(6, 182, 212, 0.3))' },
+                            '50%': { opacity: '0.8', filter: 'drop-shadow(0 0 30px rgba(139, 92, 246, 0.6))' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #05070c;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(13, 19, 32, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-panel-glow {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            box-shadow: 0 0 35px rgba(6, 182, 212, 0.15);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-airo {
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #05070c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        /* Ambient Glow Blob */
+        .glow-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Dot Grid Background Overlay */
+        .bg-dot-grid {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* 3D Dynamic Parallax Container */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .tilt-card {
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        .tilt-card:hover {
+            box-shadow: 0 25px 50px -12px rgba(6, 182, 212, 0.25);
+        }
+    </style>
+</head>
+<body class="relative antialiased selection:bg-cyan-500 selection:text-black">
+
+    <!-- Interactive Canvas Particles Parallax Background -->
+    <canvas id="parallaxCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-80"></canvas>
+
+    <!-- Organic Ambient Gradient Blobs -->
+    <div class="glow-blob w-96 h-96 bg-cyan-600/20 top-10 left-10 animate-float-slow"></div>
+    <div class="glow-blob w-[500px] h-[500px] bg-violet-600/20 top-1/3 right-5 animate-float-medium"></div>
+    <div class="glow-blob w-80 h-80 bg-emerald-500/15 bottom-10 left-1/3 animate-pulse-glow"></div>
+
+    <!-- Background Matrix Overlay Grid -->
+    <div class="fixed inset-0 bg-dot-grid pointer-events-none z-0 opacity-40"></div>
+
+    <!-- Fixed Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+            <div class="glass-panel rounded-2xl px-5 py-3 flex items-center justify-between border border-white/10 shadow-2xl">
+                <!-- Brand Logo & Badge -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-emerald-400 to-indigo-600 p-0.5 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                        <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                            <i class="fa-solid fa-microchip text-cyan-400 text-lg group-hover:rotate-12 transition-transform"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-heading font-bold text-lg tracking-wider text-white">DOT MATRIX</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border border-emerald-500/30 rounded-full">
+                                AIRO AI
+                            </span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 -mt-1 font-mono">SOLUTIONS ENGINE v3.0</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#hero" class="text-xs uppercase tracking-widest font-semibold text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Home
+                    </a>
+                    <a href="#airo-builder" class="text-xs uppercase tracking-widest font-semibold text-gray-300 hover:text-cyan-400 transition-colors">
+                        Airo Engine
+                    </a>
+                    <a href="#services" class="text-xs uppercase tracking-widest font-semibold text-gray-300 hover:text-cyan-400 transition-colors">
+                        Capabilities
+                    </a>
+                    <a href="#portfolio" class="text-xs uppercase tracking-widest font-semibold text-gray-300 hover:text-cyan-400 transition-colors">
+                        Matrix Work
+                    </a>
+                    <a href="#estimator" class="text-xs uppercase tracking-widest font-semibold text-gray-300 hover:text-cyan-400 transition-colors">
+                        ROI Estimator
+                    </a>
+                </nav>
+
+                <!-- Actions / Status -->
+                <div class="flex items-center gap-3">
+                    <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        AI Core Active
+                    </div>
+
+                    <button onclick="openModal()" class="relative group overflow-hidden rounded-xl p-[1px] font-semibold text-xs tracking-wider">
+                        <span class="absolute inset-0 bg-gradient-to-r from-cyan-500 via-indigo-500 to-emerald-400 transition-all duration-300 group-hover:opacity-90"></span>
+                        <span class="relative px-4 py-2.5 rounded-[11px] bg-slate-950 flex items-center gap-2 text-white transition-all duration-300 group-hover:bg-transparent">
+                            <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 group-hover:text-white"></i>
+                            <span>Launch AI Portal</span>
+                        </span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="md:hidden text-gray-300 hover:text-white p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobileMenu" class="hidden md:hidden mt-2 p-4 glass-panel rounded-2xl flex-col space-y-3">
+                <a href="#hero" class="mobile-link text-sm font-medium text-gray-200 hover:text-cyan-400 py-1">Home</a>
+                <a href="#airo-builder" class="mobile-link text-sm font-medium text-gray-200 hover:text-cyan-400 py-1">Airo Engine Simulator</a>
+                <a href="#services" class="mobile-link text-sm font-medium text-gray-200 hover:text-cyan-400 py-1">Capabilities</a>
+                <a href="#portfolio" class="mobile-link text-sm font-medium text-gray-200 hover:text-cyan-400 py-1">Matrix Work</a>
+                <a href="#estimator" class="mobile-link text-sm font-medium text-gray-200 hover:text-cyan-400 py-1">ROI Calculator</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="relative z-10 pt-28">
+
+        <!-- SECTION: HERO -->
+        <section id="hero" class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Column: Copy & Value Proposition -->
+                <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                    
+                    <!-- GoDaddy Airo Powered Pill -->
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
+                        <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i>
+                        <span class="text-xs uppercase tracking-widest font-semibold text-gray-200">
+                            Powered by <span class="text-cyan-400">GoDaddy Airo AI Engine</span>
+                        </span>
+                        <span class="bg-cyan-500/20 text-cyan-300 text-[10px] font-mono px-2 py-0.5 rounded-full border border-cyan-400/30">Next-Gen</span>
+                    </div>
+
+                    <!-- Dynamic Hero Headline -->
+                    <h1 class="font-heading text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight">
+                        Organic Digital Intelligence. <br>
+                        <span class="text-gradient">Dot Matrix Solutions</span>
+                    </h1>
+
+                    <p class="text-gray-300 text-lg sm:text-xl max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                        Transform raw visionary concepts into fully autonomous digital ecosystems. Instant domains, AI-crafted brand identities, high-converting websites, and organic web apps operating in real-time matrix sync.
+                    </p>
+
+                    <!-- CTAs & Action Grid -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#airo-builder" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 text-slate-950 font-bold text-sm tracking-wider uppercase hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group">
+                            <span>Test AI Business Builder</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+
+                        <a href="#portfolio" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel text-white font-semibold text-sm tracking-wider hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cubes text-cyan-400"></i>
+                            <span>Explore Matrix Work</span>
+                        </a>
+                    </div>
+
+                    <!-- Live Metrics Bar -->
+                    <div class="pt-8 border-t border-white/10 grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
+                        <div>
+                            <div class="font-heading text-2xl sm:text-3xl font-bold text-white font-mono" id="statSites">12,480+</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider">AI Sites Deployed</div>
+                        </div>
+                        <div>
+                            <div class="font-heading text-2xl sm:text-3xl font-bold text-cyan-400 font-mono">0.42s</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider">Avg AI Response</div>
+                        </div>
+                        <div>
+                            <div class="font-heading text-2xl sm:text-3xl font-bold text-emerald-400 font-mono">99.98%</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider">Matrix Uptime</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Parallax Interactive Organic AI Card -->
+                <div class="lg:col-span-5 perspective-1000">
+                    <div id="heroCard" class="tilt-card glass-panel-glow rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-cyan-500/30">
+                        <!-- Floating Accent Chip -->
+                        <div class="absolute -top-12 -right-12 w-40 h-40 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            </div>
+                            <span class="text-xs font-mono text-cyan-400 flex items-center gap-1">
+                                <i class="fa-solid fa-sparkles"></i> AI Matrix Active
+                            </span>
+                        </div>
+
+                        <!-- Live Terminal AI Preview Display -->
+                        <div class="space-y-4 font-mono text-xs">
+                            <div class="p-3 rounded-lg bg-black/40 border border-white/5 text-gray-300">
+                                <span class="text-emerald-400">&gt; ai.initiate("Dot Matrix Solutions"):</span>
+                                <div class="mt-1 text-gray-400 font-sans">Connecting GoDaddy Airo domain engine...</div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-slate-900/80 border border-cyan-500/20 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-cyan-300 font-semibold">Suggested Domain:</span>
+                                    <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">AVAILABLE</span>
+                                </div>
+                                <div class="text-lg font-bold text-white tracking-wide font-sans">
+                                    DotMatrixAI.com
+                                </div>
+                                <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full w-4/5 animate-pulse"></div>
+                                </div>
+                                <div class="text-[11px] text-gray-400 flex justify-between">
+                                    <span>AI Brand Score: 98/100</span>
+                                    <span>Instant Setup Ready</span>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Live Floating Elements inside Card -->
+                            <div class="grid grid-cols-2 gap-3 pt-2">
+                                <div class="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex items-center gap-3">
+                                    <i class="fa-solid fa-palette text-pink-400 text-lg"></i>
+                                    <div>
+                                        <div class="text-white text-xs font-sans font-semibold">Smart Styling</div>
+                                        <div class="text-[10px] text-gray-400">Adaptive Themes</div>
+                                    </div>
+                                </div>
+                                <div class="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex items-center gap-3">
+                                    <i class="fa-solid fa-bullhorn text-amber-400 text-lg"></i>
+                                    <div>
+                                        <div class="text-white text-xs font-sans font-semibold">Auto Marketing</div>
+                                        <div class="text-[10px] text-gray-400">SEO + Social Hooks</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Action Button -->
+                            <button onclick="simulateAiroBuild()" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-sans font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-arrows-rotate"></i> Re-generate AI Concept
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION: GODADDY AIRO SIMULATION ENGINE -->
+        <section id="airo-builder" class="py-20 px-4 sm:px-6 lg:px-8 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs uppercase font-mono mb-4">
+                        <i class="fa-solid fa-microchip"></i> Interactive AI Sandbox
+                    </div>
+                    <h2 class="font-heading text-3xl sm:text-5xl font-bold tracking-tight text-white">
+                        Experience <span class="text-gradient-airo">Airo AI Transformation</span>
+                    </h2>
+                    <p class="text-gray-300 mt-4 text-base sm:text-lg font-light">
+                        Type your business idea or industry below. Watch how Dot Matrix Solutions leverages GoDaddy Airo to instantly architect brand logos, domains, taglines, and live web previews.
+                    </p>
+                </div>
+
+                <!-- Interactive Generator Widget Panel -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-10 border border-white/10 max-w-4xl mx-auto shadow-2xl relative">
+                    <!-- Input Bar -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-lightbulb absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400 text-lg"></i>
+                            <input type="text" id="aiPromptInput" value="Eco-friendly Smart Coffee Pod Subscription" placeholder="Describe your business idea (e.g., Cyberpunk VR Studio, Boutique Organic Bakery)..." class="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-950/80 border border-white/15 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 text-sm sm:text-base font-sans transition-all">
+                        </div>
+                        <button onclick="runAiroGenerator()" id="generateBtn" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-500 to-indigo-600 text-slate-950 font-bold hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 flex items-center justify-center gap-2 text-sm uppercase tracking-wider shrink-0">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Generate Business</span>
+                        </button>
+                    </div>
+
+                    <!-- Preset Idea Chips -->
+                    <div class="flex flex-wrap items-center gap-2 mt-4 text-xs">
+                        <span class="text-gray-400 font-mono">Try examples:</span>
+                        <button onclick="setPrompt('Autonomous AI Drone Logistics')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 text-gray-300 border border-white/10 transition-colors">Autonomous Drone Logistics</button>
+                        <button onclick="setPrompt('Luxurious Minimalist Interior Architecture')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 text-gray-300 border border-white/10 transition-colors">Minimalist Architecture</button>
+                        <button onclick="setPrompt('Next-Gen Web3 Gaming Guild')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 text-gray-300 border border-white/10 transition-colors">Web3 Gaming Guild</button>
+                    </div>
+
+                    <!-- Live AI Output Showcase Area -->
+                    <div id="aiOutputArea" class="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- Domain Card -->
+                        <div class="glass-panel p-5 rounded-2xl border border-white/10 space-y-3 relative overflow-hidden">
+                            <div class="flex justify-between items-center text-xs text-gray-400 font-mono">
+                                <span>01 // AI DOMAIN ARCHITECT</span>
+                                <i class="fa-solid fa-globe text-cyan-400"></i>
+                            </div>
+                            <h3 id="resDomain" class="font-heading text-lg font-bold text-white tracking-wide">
+                                GreenBeanAiro.com
+                            </h3>
+                            <p id="resDomainSub" class="text-xs text-gray-400">
+                                Domain auto-secured with GoDaddy SSL & DNS Matrix
+                            </p>
+                            <div class="pt-2 flex items-center gap-2">
+                                <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">$11.99/yr</span>
+                                <span class="text-[10px] text-gray-400">1-Click Auto Claim</span>
+                            </div>
+                        </div>
+
+                        <!-- Brand Identity Card -->
+                        <div class="glass-panel p-5 rounded-2xl border border-white/10 space-y-3">
+                            <div class="flex justify-between items-center text-xs text-gray-400 font-mono">
+                                <span>02 // AI BRANDING & LOGO</span>
+                                <i class="fa-solid fa-pen-nib text-violet-400"></i>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div id="resLogoBox" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-950 font-bold text-xl font-heading shadow-md">
+                                    G
+                                </div>
+                                <div>
+                                    <div id="resBrandName" class="font-bold text-white text-sm">GreenBean Labs</div>
+                                    <div id="resTagline" class="text-xs text-gray-400 italic">"Sip Smart. Live Green."</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5 pt-1">
+                                <span class="w-5 h-5 rounded-full bg-emerald-500 border border-white/20"></span>
+                                <span class="w-5 h-5 rounded-full bg-cyan-500 border border-white/20"></span>
+                                <span class="w-5 h-5 rounded-full bg-indigo-600 border border-white/20"></span>
+                                <span class="w-5 h-5 rounded-full bg-slate-900 border border-white/20"></span>
+                            </div>
+                        </div>
+
+                        <!-- Instant Site Preview Card -->
+                        <div class="glass-panel p-5 rounded-2xl border border-white/10 space-y-3 bg-gradient-to-b from-cyan-950/30 to-slate-900/50">
+                            <div class="flex justify-between items-center text-xs text-gray-400 font-mono">
+                                <span>03 // AUTONOMOUS SITE ENGINE</span>
+                                <i class="fa-solid fa-laptop-code text-emerald-400"></i>
+                            </div>
+                            <div class="text-sm text-white font-semibold flex items-center gap-2">
+                                <i class="fa-solid fa-check-circle text-emerald-400"></i>
+                                Ready for GoDaddy Launch
+                            </div>
+                            <p class="text-xs text-gray-400">
+                                Hero layout, lead forms, booking portal & payment gateways pre-configured.
+                            </p>
+                            <button onclick="openModal()" class="w-full py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold border border-cyan-500/30 transition-colors">
+                                Deploy Full Site Wireframe
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: CAPABILITIES & SERVICES -->
+        <section id="services" class="py-24 px-4 sm:px-6 lg:px-8 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                    <div>
+                        <div class="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-2">Dot Matrix Architecture</div>
+                        <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">
+                            Autonomous Digital Capabilities
+                        </h2>
+                    </div>
+                    <p class="text-gray-400 max-w-md text-sm leading-relaxed">
+                        Combining GoDaddy Airo’s rapid deployment speed with Dot Matrix Solutions’ enterprise-grade web development & intelligent automation.
+                    </p>
+                </div>
+
+                <!-- Grid of Parallax Feature Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="tilt-card glass-panel rounded-3xl p-8 border border-white/10 relative group hover:border-cyan-500/40 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-white mb-3">AI Brand Architect</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Generates complete brand identities including logo suites, typography rules, color palettes, and domain strategy tailored to market demand.
+                        </p>
+                        <ul class="space-y-2 text-xs text-gray-300 font-mono">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400"></i> Instant GoDaddy Domain Matching</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-400"></i> Vector Logo Export & Style Guides</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="tilt-card glass-panel rounded-3xl p-8 border border-white/10 relative group hover:border-violet-500/40 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-white mb-3">Parallax Matrix UI/UX</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Next-generation immersive layouts with dynamic smooth scrolling, organic physics animations, glassmorphism aesthetics, and mobile perfection.
+                        </p>
+                        <ul class="space-y-2 text-xs text-gray-300 font-mono">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-400"></i> Interactive 3D & Canvas Animations</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-violet-400"></i> Ultra-Responsive Touch Support</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="tilt-card glass-panel rounded-3xl p-8 border border-white/10 relative group hover:border-emerald-500/40 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-white mb-3">Marketing Automation</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Automated AI copy generation, email campaigns, Google Business profile sync, and automated social media post creation on autopilot.
+                        </p>
+                        <ul class="space-y-2 text-xs text-gray-300 font-mono">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> AI SEO & Schema Injection</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Live Lead Capture Pipeline</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="tilt-card glass-panel rounded-3xl p-8 border border-white/10 relative group hover:border-amber-500/40 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-white mb-3">Cloud & Database Sync</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Seamless backend connections to GoDaddy Managed WordPress, Node.js microservices, and modern headless CMS environments.
+                        </p>
+                        <ul class="space-y-2 text-xs text-gray-300 font-mono">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Global CDN Acceleration</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Enterprise SSL Security Matrix</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="tilt-card glass-panel rounded-3xl p-8 border border-white/10 relative group hover:border-pink-500/40 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-white mb-3">AI Commerce Engine</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Automated product cataloging, AI pricing optimizations, stripe integration, and single-click checkout funnels for maximum conversions.
+                        </p>
+                        <ul class="space-y-2 text-xs text-gray-300 font-mono">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400"></i> Smart Inventory Sync</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pink-400"></i> AI Fraud Protection</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div class="tilt-card glass-panel rounded-3xl p-8 border border-white/10 relative group hover:border-cyan-400/40 transition-all duration-300">
+                        <div class="w-14 h-14 rounded-2xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center text-cyan-300 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-heading text-xl font-bold text-white mb-3">Matrix Analytics Hub</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                            Real-time user heatmaps, predictive AI visitor analytics, and automated conversion optimization recommendations.
+                        </p>
+                        <ul class="space-y-2 text-xs text-gray-300 font-mono">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-300"></i> Real-time Dashboard</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-cyan-300"></i> Auto A/B Testing</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: PORTFOLIO / MATRIX WORK -->
+        <section id="portfolio" class="py-24 px-4 sm:px-6 lg:px-8 bg-slate-950/50">
+            <div class="max-w-7xl mx-auto">
+                
+                <div class="flex flex-col md:flex-row items-center justify-between mb-12">
+                    <div>
+                        <div class="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-2">Showcase Matrix</div>
+                        <h2 class="font-heading text-3xl sm:text-5xl font-extrabold text-white">Featured Ecosystems</h2>
+                    </div>
+
+                    <!-- Filter Tabs -->
+                    <div class="flex flex-wrap gap-2 mt-6 md:mt-0 p-1.5 rounded-2xl glass-panel border border-white/10">
+                        <button onclick="filterPortfolio('all')" class="port-tab active px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-500 text-slate-950 transition-all">All Projects</button>
+                        <button onclick="filterPortfolio('airo')" class="port-tab px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white transition-all">GoDaddy Airo</button>
+                        <button onclick="filterPortfolio('ai')" class="port-tab px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white transition-all">AI Platforms</button>
+                        <button onclick="filterPortfolio('custom')" class="port-tab px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white transition-all">Custom Matrix</button>
+                    </div>
+                </div>
+
+                <!-- Portfolio Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolioGrid">
+                    
+                    <!-- Item 1 -->
+                    <div class="port-card glass-panel rounded-3xl overflow-hidden border border-white/10 group hover:border-cyan-400/50 transition-all" data-category="airo">
+                        <div class="relative h-56 bg-slate-900 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Matrix Cyber Tech" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-[10px] font-mono">
+                                GoDaddy Airo Powered
+                            </span>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="font-heading text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Dot Matrix Solutions Core</h3>
+                            <p class="text-xs text-gray-400">Revamped fluid corporate site with organic parallax particles, dynamic business generator, and automated client workflow.</p>
+                            <div class="flex items-center justify-between pt-2">
+                                <span class="text-xs font-mono text-emerald-400">dotmatrixsolutions.com</span>
+                                <button onclick="openProjectModal('Dot Matrix Solutions Core', 'Full revamp utilizing GoDaddy Airo AI engine, high-speed CDN, custom dynamic canvas, and interactive pricing tools.')" class="text-xs font-bold text-cyan-400 hover:underline">View Spec &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="port-card glass-panel rounded-3xl overflow-hidden border border-white/10 group hover:border-violet-400/50 transition-all" data-category="ai">
+                        <div class="relative h-56 bg-slate-900 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80" alt="Cyber Architecture AI" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-violet-500/20 border border-violet-400/30 text-violet-300 text-[10px] font-mono">
+                                AI Enterprise SaaS
+                            </span>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="font-heading text-xl font-bold text-white group-hover:text-violet-400 transition-colors">Synthetix AI Engine</h3>
+                            <p class="text-xs text-gray-400">Autonomous content & marketing generator integrated directly with multi-channel CRM pipelines.</p>
+                            <div class="flex items-center justify-between pt-2">
+                                <span class="text-xs font-mono text-violet-400">synthetix.ai</span>
+                                <button onclick="openProjectModal('Synthetix AI Engine', 'Custom automated content orchestration engine built with AI language models and instant hosting provisioning.')" class="text-xs font-bold text-violet-400 hover:underline">View Spec &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="port-card glass-panel rounded-3xl overflow-hidden border border-white/10 group hover:border-emerald-400/50 transition-all" data-category="custom">
+                        <div class="relative h-56 bg-slate-900 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Quantum Commerce Hub" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[10px] font-mono">
+                                Custom Matrix E-Com
+                            </span>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="font-heading text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">Aetheria Cyber Gear</h3>
+                            <p class="text-xs text-gray-400">High-converting digital storefront featuring 3D product visualizers and instant AI customer support.</p>
+                            <div class="flex items-center justify-between pt-2">
+                                <span class="text-xs font-mono text-emerald-400">aetheriagear.com</span>
+                                <button onclick="openProjectModal('Aetheria Cyber Gear', 'E-commerce platform processing over $2M annually, optimized with GoDaddy SSL and Dot Matrix automated inventory pipelines.')" class="text-xs font-bold text-emerald-400 hover:underline">View Spec &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: INTERACTIVE ROI & PRICING ESTIMATOR -->
+        <section id="estimator" class="py-24 px-4 sm:px-6 lg:px-8 relative">
+            <div class="max-w-5xl mx-auto glass-panel rounded-3xl p-8 sm:p-12 border border-white/10 shadow-2xl">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 text-xs font-mono mb-3">
+                        <i class="fa-solid fa-calculator"></i> Interactive ROI Engine
+                    </div>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white">Tailor Your AI Ecosystem</h2>
+                    <p class="text-gray-400 text-sm mt-2">Adjust parameters below to estimate project scope, setup timeline, and GoDaddy Airo automation tier.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Controls -->
+                    <div class="lg:col-span-7 space-y-6">
+                        
+                        <!-- Slider 1 -->
+                        <div>
+                            <div class="flex justify-between text-sm font-semibold mb-2">
+                                <span class="text-gray-300">Website & Landing Pages:</span>
+                                <span class="text-cyan-400 font-mono" id="valPages">3 Pages</span>
+                            </div>
+                            <input type="range" id="sliderPages" min="1" max="20" value="3" oninput="calculateEstimator()" class="w-full accent-cyan-400 h-2 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+
+                        <!-- Slider 2 -->
+                        <div>
+                            <div class="flex justify-between text-sm font-semibold mb-2">
+                                <span class="text-gray-300">AI Automation Complexity:</span>
+                                <span class="text-cyan-400 font-mono" id="valAI">Basic Branding & Domain</span>
+                            </div>
+                            <input type="range" id="sliderAI" min="1" max="3" value="1" oninput="calculateEstimator()" class="w-full accent-cyan-400 h-2 bg-slate-800 rounded-lg cursor-pointer">
+                        </div>
+
+                        <!-- Checkboxes -->
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <label class="flex items-center gap-2 text-xs text-gray-300 bg-white/5 p-3 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10">
+                                <input type="checkbox" id="chkCommerce" onchange="calculateEstimator()" class="rounded accent-cyan-400">
+                                <span>E-Commerce Integration</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-xs text-gray-300 bg-white/5 p-3 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10">
+                                <input type="checkbox" id="chkSeo" onchange="calculateEstimator()" checked class="rounded accent-cyan-400">
+                                <span>GoDaddy AI Auto-SEO</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Output Box -->
+                    <div class="lg:col-span-5 glass-panel p-6 rounded-2xl border border-cyan-500/30 text-center space-y-4 bg-gradient-to-b from-slate-900 to-slate-950">
+                        <div class="text-xs uppercase font-mono text-gray-400 tracking-wider">Estimated Investment</div>
+                        <div class="text-4xl sm:text-5xl font-extrabold text-white font-mono" id="estPrice">$1,490</div>
+                        <div class="text-xs text-emerald-400 font-mono flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-clock"></i> Deployment: <span id="estTime">3 Days</span>
+                        </div>
+
+                        <div class="text-[11px] text-gray-400 pt-2 border-t border-white/10">
+                            Includes GoDaddy Airo Domain Setup, SSL Certificate, Organic Parallax Visuals & 30-day AI Optimization Support.
+                        </div>
+
+                        <button onclick="openModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 font-bold hover:shadow-lg hover:shadow-cyan-500/20 transition-all text-xs uppercase tracking-wider">
+                            Reserve AI Build Slot
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: TRUST MATRIX & TESTIMONIALS -->
+        <section class="py-20 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white">Trusted by Next-Gen Innovators</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 space-y-4">
+                        <div class="flex text-amber-400 gap-1 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed italic">
+                            "Dot Matrix Solutions brought our GoDaddy site to life. The organic parallax effects and instant AI domain setup completely transformed our online presence!"
+                        </p>
+                        <div class="flex items-center gap-3 pt-2">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center font-bold text-xs text-black">DR</div>
+                            <div>
+                                <div class="text-xs font-bold text-white">David Ross</div>
+                                <div class="text-[10px] text-gray-400">Founder, Apex Digital</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 space-y-4">
+                        <div class="flex text-amber-400 gap-1 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed italic">
+                            "The Airo AI engine integration saved us weeks of work. Our brand identity, taglines, and website wireframes were ready in minutes!"
+                        </p>
+                        <div class="flex items-center gap-3 pt-2">
+                            <div class="w-8 h-8 rounded-full bg-violet-500 flex items-center justify-center font-bold text-xs text-white">SL</div>
+                            <div>
+                                <div class="text-xs font-bold text-white">Sarah Lin</div>
+                                <div class="text-[10px] text-gray-400">CMO, Voxel BioLabs</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 space-y-4">
+                        <div class="flex text-amber-400 gap-1 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed italic">
+                            "Unbelievable dynamic visual feel. Moving from static GoDaddy templates to Dot Matrix's revamped AI architecture doubled our conversion rate."
+                        </p>
+                        <div class="flex items-center gap-3 pt-2">
+                            <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center font-bold text-xs text-black">MK</div>
+                            <div>
+                                <div class="text-xs font-bold text-white">Marcus Vance</div>
+                                <div class="text-[10px] text-gray-400">CEO, Nexus Logistics</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-slate-950 py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="space-y-3 md:col-span-2">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-microchip text-cyan-400 text-xl"></i>
+                    <span class="font-heading font-bold text-lg text-white">DOT MATRIX SOLUTIONS</span>
+                </div>
+                <p class="text-xs text-gray-400 max-w-sm">
+                    Empowering modern brands with GoDaddy Airo AI architecture, organic parallax aesthetics, and intelligent web automation.
+                </p>
+                <div class="text-[11px] text-cyan-400/80 font-mono">
+                    Official URL: https://dotmatrixsolutions.godaddysites.com
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-mono uppercase tracking-wider text-gray-300 mb-3">Navigation</h4>
+                <ul class="space-y-2 text-xs text-gray-400">
+                    <li><a href="#hero" class="hover:text-cyan-400">Home</a></li>
+                    <li><a href="#airo-builder" class="hover:text-cyan-400">Airo AI Sandbox</a></li>
+                    <li><a href="#services" class="hover:text-cyan-400">Capabilities</a></li>
+                    <li><a href="#portfolio" class="hover:text-cyan-400">Matrix Work</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-mono uppercase tracking-wider text-gray-300 mb-3">Connect Matrix</h4>
+                <div class="flex gap-3 text-lg text-gray-400">
+                    <a href="#" class="hover:text-cyan-400"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="hover:text-cyan-400"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-cyan-400"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" class="hover:text-cyan-400"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
+            <div>&copy; 2026 Dot Matrix Solutions. All rights reserved. Powered by GoDaddy Airo.</div>
+            <div class="mt-2 sm:mt-0 flex gap-4">
+                <a href="#" class="hover:underline">Privacy Policy</a>
+                <a href="#" class="hover:underline">Terms of Service</a>
+                <a href="#" class="hover:underline">AI Guidelines</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE CONSULTATION MODAL -->
+    <div id="aiModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-lg w-full border border-cyan-500/40 relative transform scale-95 transition-all duration-300" id="modalContainer">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                    <i class="fa-solid fa-rocket text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xl text-white">Launch Your AI Workspace</h3>
+                    <p class="text-xs text-gray-400">Powered by Dot Matrix + GoDaddy Airo</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Your Name</label>
+                    <input type="text" required placeholder="Alex Mercer" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
+                    <input type="email" required placeholder="alex@company.com" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Business Concept / Goal</label>
+                    <textarea rows="3" required placeholder="Describe what you want to build or automate..." class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-400"></textarea>
+                </div>
+
+                <div id="modalMsg" class="hidden p-3 rounded-xl bg-emerald-500/20 text-emerald-300 text-xs text-center border border-emerald-500/30">
+                    <i class="fa-solid fa-check-circle mr-1"></i> AI Request Transmitted! Our team will contact you shortly.
+                </div>
+
+                <button type="submit" id="modalSubmitBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-600 text-slate-950 font-bold hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-xs uppercase tracking-wider">
+                    Initiate Build Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PROJECT SPECIFICATION MODAL -->
+    <div id="specModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-md w-full border border-violet-500/40 relative">
+            <button onclick="closeSpecModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 id="specTitle" class="font-heading font-bold text-2xl text-white mb-2">Project Spec</h3>
+            <p id="specBody" class="text-xs text-gray-300 leading-relaxed mb-6"></p>
+            <button onclick="closeSpecModal()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs">
+                Close Spec Window
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        // --- 1. Organic Interactive Parallax Canvas Particles ---
+        const canvas = document.getElementById('parallaxCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        let mouse = {
+            x: width / 2,
+            y: height / 2,
+            targetX: width / 2,
+            targetY: height / 2
+        };
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initNodes();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.targetX = e.clientX;
+            mouse.targetY = e.clientY;
+        });
+
+        class MatrixNode {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2 + 1;
+                this.depth = Math.random() * 2 + 0.5; // Parallax depth layer
+                this.color = Math.random() > 0.5 ? '#06b6d4' : (Math.random() > 0.5 ? '#10b981' : '#8b5cf6');
+            }
+
+            update() {
+                // Velocity update
+                this.x += this.vx * this.depth;
+                this.y += this.vy * this.depth;
+
+                // Canvas bounce bounds
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse organic displacement (Parallax effect)
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 150) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (150 - dist) / 150;
+                    this.x -= Math.cos(angle) * force * 2 * this.depth;
+                    this.y -= Math.sin(angle) * force * 2 * this.depth;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius * this.depth, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+            }
+        }
+
+        let nodes = [];
+        function initNodes() {
+            nodes = [];
+            const count = Math.min(Math.floor(width / 15), 75);
+            for (let i = 0; i < count; i++) {
+                nodes.push(new MatrixNode());
+            }
+        }
+
+        function animateCanvas() {
+            // Smooth mouse interpolation
+            mouse.x += (mouse.targetX - mouse.x) * 0.05;
+            mouse.y += (mouse.targetY - mouse.y) * 0.05;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw organic matrix lines between nearby nodes
+            for (let i = 0; i < nodes.length; i++) {
+                nodes[i].update();
+                nodes[i].draw();
+
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.strokeStyle = `rgba(6, 182, 212, ${1 - dist / 130 * 0.8})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateCanvas);
+        }
+
+        window.onload = function() {
+            initNodes();
+            animateCanvas();
+        };
+
+        // --- 2. 3D Card Parallax Tilt Effect ---
+        const tiltCards = document.querySelectorAll('.tilt-card');
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 15;
+                const rotateY = (centerX - x) / 15;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        });
+
+        // --- 3. GoDaddy Airo AI Generator Simulator ---
+        const presets = [
+            { domain: 'AeroDroneLogistics.com', brand: 'AeroMotion AI', tagline: 'Autonomous Delivery Matrix', color: 'from-cyan-400 to-indigo-600' },
+            { domain: 'LuxMinimalistStudio.com', brand: 'Aether Architect', tagline: 'Organic Spatial Living', color: 'from-amber-400 to-rose-500' },
+            { domain: 'GuildMatrixGaming.gg', brand: 'Nexus Play Guild', tagline: 'Empowering Web3 Play', color: 'from-violet-500 to-emerald-400' }
+        ];
+
+        function setPrompt(txt) {
+            document.getElementById('aiPromptInput').value = txt;
+            runAiroGenerator();
+        }
+
+        function runAiroGenerator() {
+            const btn = document.getElementById('generateBtn');
+            const prompt = document.getElementById('aiPromptInput').value || 'Smart AI Solution';
+            
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Analyzing Matrix...</span>`;
+            
+            setTimeout(() => {
+                const clean = prompt.replace(/[^a-zA-Z0-9]/g, '');
+                const firstWord = clean.substring(0, 8) || 'Matrix';
+
+                document.getElementById('resDomain').innerText = `${firstWord}Airo.com`;
+                document.getElementById('resBrandName').innerText = `${firstWord} Intelligence`;
+                document.getElementById('resTagline').innerText = `"Next-Gen ${prompt.substring(0, 20)} Powered by Airo"`;
+                document.getElementById('resLogoBox').innerText = firstWord.charAt(0).toUpperCase();
+
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Generate Business</span>`;
+            }, 600);
+        }
+
+        function simulateAiroBuild() {
+            const rand = presets[Math.floor(Math.random() * presets.length)];
+            document.getElementById('aiPromptInput').value = rand.brand;
+            runAiroGenerator();
+        }
+
+        // --- 4. Portfolio Filter ---
+        function filterPortfolio(cat) {
+            const tabs = document.querySelectorAll('.port-tab');
+            tabs.forEach(t => {
+                t.classList.remove('bg-cyan-500', 'text-slate-950', 'active');
+                t.classList.add('text-gray-400');
+            });
+
+            event.target.classList.add('bg-cyan-500', 'text-slate-950', 'active');
+            event.target.classList.remove('text-gray-400');
+
+            const cards = document.querySelectorAll('.port-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.dataset.category === cat) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // --- 5. Interactive ROI Estimator Calculator ---
+        function calculateEstimator() {
+            const pages = parseInt(document.getElementById('sliderPages').value);
+            const aiLevel = parseInt(document.getElementById('sliderAI').value);
+            const isCommerce = document.getElementById('chkCommerce').checked;
+            const isSeo = document.getElementById('chkSeo').checked;
+
+            document.getElementById('valPages').innerText = `${pages} Page${pages > 1 ? 's' : ''}`;
+
+            let aiText = 'Basic Branding & Domain';
+            if (aiLevel === 2) aiText = 'AI Content & Workflow Engine';
+            if (aiLevel === 3) aiText = 'Autonomous Full Matrix CRM';
+            document.getElementById('valAI').innerText = aiText;
+
+            let price = 800 + (pages * 150) + (aiLevel * 300);
+            if (isCommerce) price += 600;
+            if (isSeo) price += 200;
+
+            let days = Math.ceil(2 + (pages * 0.5) + (aiLevel * 1));
+
+            document.getElementById('estPrice').innerText = `$${price.toLocaleString()}`;
+            document.getElementById('estTime').innerText = `${days} Days`;
+        }
+
+        // --- 6. Modal Handlers ---
+        function openModal() {
+            const modal = document.getElementById('aiModal');
+            const container = document.getElementById('modalContainer');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('aiModal');
+            const container = document.getElementById('modalContainer');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const msg = document.getElementById('modalMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => {
+                closeModal();
+                msg.classList.add('hidden');
+            }, 2000);
+        }
+
+        function openProjectModal(title, body) {
+            document.getElementById('specTitle').innerText = title;
+            document.getElementById('specBody').innerText = body;
+            const modal = document.getElementById('specModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeSpecModal() {
+            const modal = document.getElementById('specModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // --- 7. Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+            });
+        });
+    </script>
+</body>
+</html>
