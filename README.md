@@ -26,5 +26,13 @@ Everything is in index.html. Colors are in :root; suggested discussion points ar
 ## Behavior and privacy
 Planner text is rendered with textContent, never interpreted as HTML. Entries remain in memory only. There is no backend, analytics, form delivery, live AI, domain registration, or payment processing. Preference switches last for the current visit. The hosting provider and external profile have their own privacy practices.
 
+## Domain and digital-presence intake
+
+The domain and presence service card and contact action open a prefilled inquiry to info@dotmatrixsolutions.com. They ask for company, existing domain/site, need, timeline, and whether the prospect wants DMS assistance or a direct product purchase. This is an email handoff, not an automatically delivered form or Airtable integration.
+
+For each received inquiry, create a card in the existing DMS Kanban workflow under **Lead Intake**. Record the customer's stated need and contact details, current domain/registrar and renewal date if supplied, ownership/access constraints, requested products, timeline, and source as `DMS website — domain and digital presence`. Move to **Scoping & Proposal** after qualification; use **In Progress → QA & Testing → Deployment → Ongoing Support** when the work is accepted. Never request registrar passwords through the public inquiry email.
+
+If a customer explicitly wants to buy an eligible product directly, check the current CJ GoDaddy advertiser terms and product eligibility, then provide the verified DMS CJ deep/referral link with a clear affiliate disclosure. Keep consulting and implementation pricing separate from the customer's vendor checkout. The verified account-specific CJ destination was not available in this checkout, so no public purchase button or untracked GoDaddy link has been added.
+
 ## Validation
 JavaScript syntax, local references, fragment targets and HTML structure were checked during preparation. Browser visual QA was not performed. Before committing, open on your phone, create/download a brief, adjust scope, filter examples, and verify your contact profile.
